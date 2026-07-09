@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Arts & Imagery | 数字艺术与微图库</title>
+    <style>
+        /* ==========================================================================
+           1. 设计系统变量与重置 (Design System & Reset)
+           ========================================================================== */
+
+        :root {
+            --bg-color: #0d0d0f;          /* 极暗墨黑背景 */
+            --text-pure: #ffffff;         /* 纯白主文字 */
+            --text-high-gray: #a1a1a6;    /* 高级冷灰（副文本） */
+            --text-muted: #6e6e73;        /* 暗调灰（辅助信息） */
+            --accent-glow: rgba(255, 255, 255, 0.03); 
+            --card-bg: #16161a;           /* 深色卡片底色 */
+            --card-border: rgba(255, 255, 255, 0.06);
+            --transition-epic: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* 高级缓动曲线 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-pure);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ==========================================================================
+           2. 首屏布局 (Hero Header Section)
+           ========================================================================== */
+        .magazine-header {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .brand-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+        }
+
+        .personal-intro {
+            max-width: 380px;
+            font-size: 0.9rem;
+            color: var(--text-high-gray);
+            text-align: right;
+            line-height: 1.7;
+            letter-spacing: 0.05em;
+        }
+
+        /* 核心标语区域 */
+        .hero-slogan-wrapper {
+            max-width: 1600px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero-slogan {
+            font-size: clamp(2.5rem, 6vw, 5.5rem); /* 响应式流体字体 */
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            text-transform: uppercase;
+            /* 渐变中带有轻微的冷灰色调，模拟银盐相纸质感 */
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ==========================================================================
+           3. 核心功能卡片区域 (Platform Links Grid)
+           ========================================================================== */
+        .platform-section {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem 8rem 2rem;
+        }
+
+        /* 5列并排响应式网格布局 */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+        }
+
+        .platform-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2.5rem 2rem;
+            border-radius: 4px; /* 硬朗微圆角，更有画廊杂志感 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-epic);
+            cursor: pointer;
+        }
+
+        /* 卡片内部细节结构 */
+        .card-top h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.2rem;
+            color: var(--text-pure);
+        }
+
+        .card-top p {
+            font-size: 0.9rem;
+            color: var(--text-high-gray);
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+        }
+
+        /* 按钮设计 */
+        .visit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-pure);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: var(--transition-epic);
+        }
+
+        .visit-btn span {
+            transition: var(--transition-epic);
+        }
+
+        /* ==========================================================================
+           4. 炫酷鼠标悬停特效 (Hover Effects)
+           ========================================================================== */
+        .platform-card:hover {
+            transform: translateY(-8px);
+            background-color: #1c1c22;
+            border-color: rgba(255, 255, 255, 0.2);
+            /* 柔和深邃的豪华阴影 */
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+                        0 0 40px rgba(255, 255, 255, 0.02);
+        }
+
+        /* 悬停时按钮整体提亮，文字和箭头产生间距位移 */
+        .platform-card:hover .visit-btn {
+            background-color: var(--text-pure);
+            color: var(--bg-color);
+            border-color: var(--text-pure);
+        }
+
+        .platform-card:hover .visit-btn span.arrow {
+            transform: translateX(4px);
+        }
+
+        /* ==========================================================================
+           5. 响应式断点媒体查询 (Responsive Breakdown)
+           ========================================================================== */
+        @media (max-width: 1400px) {
+            .platform-grid {
+                grid-template-columns: repeat(3, 1fr); /* 宽屏变3列 */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .magazine-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding-top: 2rem;
+            }
+            .personal-intro {
+                text-align: left;
+            }
+            .hero-slogan-wrapper {
+                margin: 4rem auto;
+            }
+            .platform-grid {
+                grid-template-columns: repeat(2, 1fr); /* 平板变2列 */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .platform-grid {
+                grid-template-columns: 1fr; /* 手机端完全垂直并排 */
+            }
+            .platform-card {
+                min-height: 320px;
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* ==========================================================================
+           6. 底部版权 (Footer)
+           ========================================================================== */
+        footer {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="magazine-header">
+        <div class="brand-logo">Visuals Studio</div>
+        <div class="personal-intro">
+            通过镜头与数字化演算法捕捉纯粹的构图实验。致力于面向全球提供顶尖分辨率的微图资产与视觉媒介。
+        </div>
+    </header>
+
+    <section class="hero-slogan-wrapper">
+        <h1 class="hero-slogan">数字艺术与微图库</h1>
+    </section>
+
+    <main class="platform-section">
+        <div class="platform-grid">
+            
+            <div class="platform-card" onclick="location.href='#'">
+                <div class="card-top">
+                    <h3>Shutterstock</h3>
+                    <p>探索我的高分辨率创意摄影、自然景观及城市人文题材，授权便捷，适合各类商业媒介营销传播。</p>
+                </div>
+                <a href="#" class="visit-btn" onclick="event.stopPropagation();">
+                    <span>进入店铺</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="location.href='#'">
+                <div class="card-top">
+                    <h3>Adobe Stock</h3>
+                    <p>包含深度无缝衔接Creative Cloud的矢量资产与创意素材。提供前沿AI赋能的高级精选概念视觉渲染图。</p>
+                </div>
+                <a href="https://contributor.stock.adobe.com/tw/uploads/review" class="visit-btn" onclick="event.stopPropagation();">
+                    <span>进入店铺</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="location.href='#'">
+                <div class="card-top">
+                    <h3>123RF</h3>
+                    <p>精选高画质商业背景图库与宏观材质纹理资产。满足自媒体、数字化全渠道投放的日常高频视觉需求。</p>
+                </div>
+                <a href="#" class="visit-btn" onclick="event.stopPropagation();">
+                    <span>进入店铺</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="location.href='#'">
+                <div class="card-top">
+                    <h3>Dreamstime</h3>
+                    <p>这里托管了严苛审核通过的精细化画幅艺术。涵盖建筑几何、静物实验等多维度的高美学图像馆藏。</p>
+                </div>
+                <a href="#" class="visit-btn" onclick="event.stopPropagation();">
+                    <span>进入店铺</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="location.href='#'">
+                <div class="card-top">
+                    <h3>DepositPhotos</h3>
+                    <p>多门类商业配图方案，适合全球化企业宣传与全案设计使用。提供高契合度的故事流影像及概念艺术作。</p>
+                </div>
+                <a href="#" class="visit-btn" onclick="event.stopPropagation();">
+                    <span>进入店铺</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-left">
+            &copy; 2026 VISUALS STUDIO. ALL RIGHTS RESERVED.
+        </div>
+        <div class="footer-right">
+            DESIGNED FOR DIGITAL ARTISTS
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 为所有平台卡片添加微妙的进场动画延迟
+            const cards = document.querySelectorAll('.platform-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100); // 丝滑的阶梯式渐显特效
+            });
+        });
+    </script>
+</body>
+</html>
