@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Arts & Imagery | 数字艺术与微图库</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         /* ==========================================================================
            1. 设计系统变量与重置 (Design System & Reset)
            ========================================================================== */
-
         :root {
-            --bg-color: #0d0d0f;          /* 极暗墨黑背景 */
+            /* 调整为带有极深灰蓝调的墨黑背景，能让毛玻璃表现更通透、更现代 */
+            --bg-color: #0b0c10;          
             --text-pure: #ffffff;         /* 纯白主文字 */
             --text-high-gray: #a1a1a6;    /* 高级冷灰（副文本） */
             --text-muted: #6e6e73;        /* 暗调灰（辅助信息） */
-            --accent-glow: rgba(255, 255, 255, 0.03); 
-            --card-bg: #16161a;           /* 深色卡片底色 */
-            --card-border: rgba(255, 255, 255, 0.06);
+            
+            /* 核心：毛玻璃配置变量 */
+            --card-glass-bg: rgba(255, 255, 255, 0.03); 
+            --card-glass-hover-bg: rgba(255, 255, 255, 0.06); 
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(255, 255, 255, 0.18);
+            
             --transition-epic: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* 高级缓动曲线 */
         }
 
@@ -32,16 +38,42 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-pure);
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;;
+            /* 应用全球顶级的无衬线 Inter 字体 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             line-height: 1.5;
             overflow-x: hidden;
+            position: relative;
         }
 
         a {
             color: inherit;
             text-decoration: none;
+        }
+
+        /* 💡 特效：在背景底层放置两个柔和的彩色极光光晕，供毛玻璃卡片折射高光 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: absolute;
+            bottom: 10%;
+            right: 15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.06) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* ==========================================================================
@@ -59,7 +91,7 @@
 
         .brand-logo {
             font-size: 1.1rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.25em;
             text-transform: uppercase;
         }
@@ -83,10 +115,9 @@
         .hero-slogan {
             font-size: clamp(2.5rem, 6vw, 5.5rem); /* 响应式流体字体 */
             font-weight: 700;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.03em; /* 略微缩紧字距，大厂高级感 */
             line-height: 1.1;
             text-transform: uppercase;
-            /* 渐变中带有轻微的冷灰色调，模拟银盐相纸质感 */
             background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -101,18 +132,20 @@
             padding: 0 2rem 8rem 2rem;
         }
 
-        /* 5列并排响应式网格布局 */
         .platform-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 1.5rem;
         }
 
+        /* 核心：将原本的卡片升级为豪华毛玻璃 */
         .platform-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background-color: var(--card-glass-bg); /* 半透明极简背景 */
+            backdrop-filter: blur(20px);            /* 舒适的模糊半径 */
+            -webkit-backdrop-filter: blur(20px);    /* 兼容 Safari */
+            border: 1px solid var(--card-border);   /* 模拟玻璃边缘折射的高光 */
             padding: 2.5rem 2rem;
-            border-radius: 4px; /* 硬朗微圆角，更有画廊杂志感 */
+            border-radius: 16px;                    /* 大圆角比旧版的 4px 更有现代高级感 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -121,13 +154,14 @@
             overflow: hidden;
             transition: var(--transition-epic);
             cursor: pointer;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25); /* 深邃阴影 */
         }
 
         /* 卡片内部细节结构 */
         .card-top h3 {
             font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             margin-bottom: 1.2rem;
             color: var(--text-pure);
         }
@@ -148,6 +182,7 @@
             padding: 1rem 1.2rem;
             background-color: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; /* 按钮也增加微圆角呼应整体结构 */
             color: var(--text-pure);
             font-size: 0.85rem;
             font-weight: 500;
@@ -161,21 +196,20 @@
         }
 
         /* ==========================================================================
-           4. 炫酷鼠标悬停特效 (Hover Effects)
+           4. 鼠标悬停特效 (Hover Effects)
            ========================================================================== */
         .platform-card:hover {
-            transform: translateY(-8px);
-            background-color: #1c1c22;
-            border-color: rgba(255, 255, 255, 0.2);
-            /* 柔和深邃的豪华阴影 */
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
-                        0 0 40px rgba(255, 255, 255, 0.02);
+            transform: translateY(-6px);
+            background-color: var(--card-glass-hover-bg); /* 悬停微亮 */
+            border-color: var(--card-border-hover);      /* 边缘高光加强 */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 
+                        0 0 30px rgba(255, 255, 255, 0.03);
         }
 
-        /* 悬停时按钮整体提亮，文字和箭头产生间距位移 */
+        /* 悬停时按钮整体提亮变为反白效果，文字和箭头产生位移 */
         .platform-card:hover .visit-btn {
             background-color: var(--text-pure);
-            color: var(--bg-color);
+            color: #000000;
             border-color: var(--text-pure);
         }
 
@@ -188,7 +222,7 @@
            ========================================================================== */
         @media (max-width: 1400px) {
             .platform-grid {
-                grid-template-columns: repeat(3, 1fr); /* 宽屏变3列 */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -205,13 +239,13 @@
                 margin: 4rem auto;
             }
             .platform-grid {
-                grid-template-columns: repeat(2, 1fr); /* 平板变2列 */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 600px) {
             .platform-grid {
-                grid-template-columns: 1fr; /* 手机端完全垂直并排 */
+                grid-template-columns: 1fr;
             }
             .platform-card {
                 min-height: 320px;
@@ -252,7 +286,7 @@
     <main class="platform-section">
         <div class="platform-grid">
             
-            <div class="platform-card" onclick="location.href='#'">
+            <div class="platform-card" onclick="location.href='https://www.shutterstock.com/zh/g/Jac+King'">
                 <div class="card-top">
                     <h3>Shutterstock</h3>
                     <p>探索我的高分辨率创意摄影、自然景观及城市人文题材，授权便捷，适合各类商业媒介营销传播。</p>
@@ -263,7 +297,7 @@
                 </a>
             </div>
 
-            <div class="platform-card" onclick="location.href='#'">
+            <div class="platform-card" onclick="location.href='https://contributor.stock.adobe.com/tw/uploads/review'">
                 <div class="card-top">
                     <h3>Adobe Stock</h3>
                     <p>包含深度无缝衔接Creative Cloud的矢量资产与创意素材。提供前沿AI赋能的高级精选概念视觉渲染图。</p>
@@ -274,7 +308,7 @@
                 </a>
             </div>
 
-            <div class="platform-card" onclick="location.href='#'">
+            <div class="platform-card" onclick="location.href='https://www.123rf.com/profile_jcak'">
                 <div class="card-top">
                     <h3>123RF</h3>
                     <p>精选高画质商业背景图库与宏观材质纹理资产。满足自媒体、数字化全渠道投放的日常高频视觉需求。</p>
@@ -285,7 +319,7 @@
                 </a>
             </div>
 
-            <div class="platform-card" onclick="location.href='#'">
+            <div class="platform-card" onclick="location.href='https://www.dreamstime.com/account/online-files'">
                 <div class="card-top">
                     <h3>Dreamstime</h3>
                     <p>这里托管了严苛审核通过的精细化画幅艺术。涵盖建筑几何、静物实验等多维度的高美学图像馆藏。</p>
@@ -296,10 +330,10 @@
                 </a>
             </div>
 
-            <div class="platform-card" onclick="location.href='#'">
+            <div class="platform-card" onclick="location.href='https://depositphotos.com/cn/files.html'">
                 <div class="card-top">
                     <h3>DepositPhotos</h3>
-                    <p>多门类商业配图方案，适合全球化企业宣传与全案设计使用。提供高契合度的故事流影像及概念艺术作。</p>
+                    <p>多门类商业配图方案，适合全球化企业宣传与全案设计使用。提供高契合度的故事流影像及概念艺术作品。</p>
                 </div>
                 <a href="https://depositphotos.com/cn/files.html" class="visit-btn" onclick="event.stopPropagation();">
                     <span>进入店铺</span>
@@ -337,19 +371,3 @@
     </script>
 </body>
 </html>
-
-
-.card {
-    /* 粘贴在这里 */
-    background: rgba(255, 255, 255, 0.04); 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-
-
